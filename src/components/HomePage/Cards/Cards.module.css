@@ -1,0 +1,24 @@
+.container {
+    display: flex !important;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.card {
+    display: flex;
+    flex-direction: row;
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+    transition: all 0.3s ease-in-out;
+}
+
+.card:hover {
+    box-shadow: 0 19px 38px rgba(0, 0, 0, 0.30), 0 15px 12px rgba(0, 0, 0, 0.22);
+}
+
+.card:nth-child(odd) {
+    align-self: flex-start;
+}
+
+.card:nth-child(even) {
+    align-self: flex-end;
+}
