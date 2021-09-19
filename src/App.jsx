@@ -1,12 +1,16 @@
 import { BrowserRouter, Switch, Route } from "react-router-dom";
-import { HOME_PAGE } from "./consts/routes";
+import { HOME, LOGIN, REGISTER } from "./consts/routes";
 import HomePage from "./pages/HomePage/HomePage";
 import withLayout from "./hoc/withLayout";
+import RegisterPage from "./pages/RegisterPage/RegisterPage";
+import LoginPage from "./pages/LoginPage/LoginPage";
 
 const App = () => (
   <BrowserRouter>
     <Switch>
-      <Route path={HOME_PAGE} component={withLayout(HomePage)} />
+      <Route path={REGISTER} exact component={withLayout(RegisterPage)} />
+      <Route path={LOGIN} exact component={withLayout(LoginPage)} />
+      <Route path={HOME} component={withLayout(HomePage)} />
     </Switch>
   </BrowserRouter>
 );
