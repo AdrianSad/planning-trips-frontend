@@ -1,35 +1,81 @@
 import * as React from "react";
 import {
-  Avatar,
   Box,
   Button,
-  Checkbox,
   CssBaseline,
-  FormControlLabel,
   Grid,
-  Link,
   Paper,
+  Snackbar,
   TextField,
 } from "@material-ui/core";
 import { LockOutlined } from "@material-ui/icons";
 import Typography from "@material-ui/core/Typography";
-import { Scrolling } from "../../assets";
+import HttpService from "../../services/HttpService";
+import { Link, withRouter } from "react-router-dom";
+import { connect } from "react-redux";
+import { HOME, REGISTER } from "../../consts/routes";
+import { actions } from "../../store/reducer/authReducer";
+import styles from "./LoginPage.module.css";
+import { GradientButton } from "../../components";
 
-export default class LoginPage extends React.Component {
-  render() {
-    const handleSubmit = (event) => {
-      event.preventDefault();
-      const data = new FormData(event.currentTarget);
+class LoginPage extends React.Component {
+  state = {
+    alert: {
+      open: false,
+      text: "",
+    },
+  };
 
-      console.log({
-        email: data.get("email"),
-        password: data.get("password"),
+  componentDidMount() {
+    if (this.props.location?.state) {
+      this.setState({
+        alert: this.props.location.state.alert,
       });
-    };
+    }
+  }
 
+  handleClose = () => this.setState({ alert: { open: false } });
+
+  handleSubmit = (event) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+
+    HttpService.login(data.get("email"), data.get("password"))
+      .then(({ data }) => {
+        this.props.setUserData(data);
+        this.props.history.push({
+          pathname: HOME,
+          state: {
+            alert: {
+              open: true,
+              text: "You logged in successfully",
+            },
+          },
+        });
+      })
+      .catch((err) => {
+        console.error(err);
+        this.setState({
+          alert: {
+            open: true,
+            text: "Something went wrong",
+          },
+        });
+      });
+  };
+
+  render() {
+    const { alert } = this.state;
     return (
       <main>
-        <Grid container component="main">
+        <Snackbar
+          open={alert?.open}
+          autoHideDuration={6000}
+          onClose={this.handleClose}
+          message={alert?.text}
+          style={{ color: "white" }}
+        />
+        <Grid container component="main" sm={{ mt: 4 }}>
           <CssBaseline />
           <Grid
             item
@@ -37,7 +83,8 @@ export default class LoginPage extends React.Component {
             sm={4}
             md={7}
             sx={{
-              backgroundImage: "url(https://source.unsplash.com/random)",
+              backgroundImage:
+                "url(https://images.unsplash.com/photo-1632772196297-39ab1598668a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8fHx8fHx8MTYzMzM3NjI2OQ&ixlib=rb-1.2.1&q=80&w=1080)",
               backgroundRepeat: "no-repeat",
               backgroundColor: (t) =>
                 t.palette.mode === "light"
@@ -49,9 +96,11 @@ export default class LoginPage extends React.Component {
             }}
           >
             <img
-              src={"https://source.unsplash.com/random"}
+              src={
+                "https://images.unsplash.com/photo-1632772196297-39ab1598668a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8fHx8fHx8MTYzMzM3NjI2OQ&ixlib=rb-1.2.1&q=80&w=1080"
+              }
               alt={""}
-              style={{ height: "100vh", width: "100%" }}
+              style={{ height: "100vh", width: "100%", objectFit: "cover" }}
             />
           </Grid>
           <Grid
@@ -72,16 +121,14 @@ export default class LoginPage extends React.Component {
                 alignItems: "center",
               }}
             >
-              <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-                <LockOutlined />
-              </Avatar>
+              <LockOutlined />
               <Typography component="h1" variant="h5">
                 Sign in
               </Typography>
               <Box
                 component="form"
                 noValidate
-                onSubmit={handleSubmit}
+                onSubmit={this.handleSubmit}
                 sx={{ mt: 1 }}
               >
                 <TextField
@@ -104,29 +151,23 @@ export default class LoginPage extends React.Component {
                   id="password"
                   autoComplete="current-password"
                 />
-                <FormControlLabel
-                  control={<Checkbox value="remember" color="primary" />}
-                  label="Remember me"
-                />
-                <Button
+                <GradientButton
                   type="submit"
                   fullWidth
                   variant="contained"
-                  sx={{ mt: 3, mb: 2 }}
+                  sx={{ mt: 3, mb: 5 }}
                 >
                   Sign In
-                </Button>
-                <Grid container>
-                  <Grid item xs>
-                    <Link href="#" variant="body2">
-                      Forgot password?
-                    </Link>
-                  </Grid>
-                  <Grid item>
-                    <Link href="#" variant="body2">
-                      {"Don't have an account? Sign Up"}
-                    </Link>
-                  </Grid>
+                </GradientButton>
+                <Grid
+                  container
+                  direction="row"
+                  justifyContent="center"
+                  alignItems="center"
+                >
+                  <Link to={REGISTER} className={styles.link}>
+                    Don't have an account? Sign Up
+                  </Link>
                 </Grid>
               </Box>
             </Box>
@@ -136,3 +177,9 @@ export default class LoginPage extends React.Component {
     );
   }
 }
+
+const mapDispatchToProps = {
+  setUserData: actions.setUserData,
+};
+
+export default connect(null, mapDispatchToProps)(withRouter(LoginPage));

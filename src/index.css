@@ -10,7 +10,6 @@ body {
   font-family: "Oswald", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: #333333;
   box-sizing: border-box;
 }
 
@@ -21,4 +20,5 @@ code {
 
 a {
   text-decoration: none;
+  color: #333333;
 }

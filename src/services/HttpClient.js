@@ -8,10 +8,15 @@ const HttpClient = axios.create({
   },
 });
 
+const LOGIN_ROUTE = "/api/v1/user/login";
+const REGISTER_ROUTE = "/api/v1/user/register";
+
 HttpClient.interceptors.request.use(
   (config) => {
     const token = TokenService.getLocalAccessToken();
-    if (token) {
+    console.log(config);
+
+    if (token && config.url !== LOGIN_ROUTE && config.url !== REGISTER_ROUTE) {
       config.headers["Authorization"] = "Bearer " + token; // for Spring Boot back-end
     }
     return config;
@@ -28,13 +33,13 @@ HttpClient.interceptors.response.use(
   async (err) => {
     const originalConfig = err.config;
 
-    if (originalConfig.url !== "/auth/signin" && err.response) {
+    if (originalConfig.url !== LOGIN_ROUTE && err.response) {
       // Access Token was expired
       if (err.response.status === 401 && !originalConfig._retry) {
         originalConfig._retry = true;
 
         try {
-          const rs = await HttpClient.post("/auth/refreshtoken", {
+          const rs = await HttpClient.post("/api/v1/user/refreshtoken", {
             refreshToken: TokenService.getLocalRefreshToken(),
           });
 

@@ -3,13 +3,38 @@ import Hero from "../../components/HomePage/Hero/Hero";
 import Cards from "../../components/HomePage/Cards/Cards";
 import Typography from "@material-ui/core/Typography";
 import styles from "./HomePage.module.css";
-import { Button, Container } from "@material-ui/core";
-import { AccountCircle } from "@material-ui/icons";
+import { Button, Container, Snackbar } from "@material-ui/core";
+import { AccountCircle, Close } from "@material-ui/icons";
 
 class HomePage extends Component {
+  state = {
+    alert: {
+      open: false,
+      text: "",
+    },
+  };
+
+  componentDidMount() {
+    if (this.props.location?.state) {
+      this.setState({
+        alert: this.props.location.state.alert,
+      });
+    }
+  }
+
+  handleClose = () => this.setState({ alert: { open: false } });
+
   render() {
+    const { alert } = this.state;
     return (
       <main>
+        <Snackbar
+          open={alert?.open}
+          autoHideDuration={6000}
+          onClose={this.handleClose}
+          message={alert?.text}
+          className={styles.snackbar}
+        />
         <Hero />
         <Cards />
         <Container className={styles.container}>
