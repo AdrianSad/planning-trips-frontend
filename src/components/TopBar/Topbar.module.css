@@ -1,0 +1,49 @@
+@value breakpoints: "../../breakpoints.css";
+
+.mainToolbarTransparent {
+  background: none !important;
+  transition: all 0.3s ease-in-out !important;
+  padding: 10px 0;
+}
+
+.mainToolbarWhite {
+  background: white !important;
+  transition: all 0.3s ease-in-out !important;
+}
+
+.toolbar {
+  margin: 0 300px;
+}
+
+.root {
+  flex-grow: 1;
+}
+
+.titleWhite {
+  color: white;
+  text-shadow: white 2px 2px 5px;
+  flex-grow: 1;
+  font-weight: bold;
+  font-size: 24px;
+  transition: all 0.3s ease-in-out;
+}
+
+.titleBlack {
+  color: black;
+  flex-grow: 1;
+  font-weight: bold;
+  letter-spacing: 2px;
+  font-size: 24px;
+  transition: all 0.3s ease-in-out;
+}
+
+.logo {
+  width: 64px;
+  height: 64px;
+}
+
+@media (max-width: 1200px) {
+  .toolbar {
+    margin: 0;
+  }
+}

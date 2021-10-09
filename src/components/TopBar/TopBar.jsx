@@ -8,50 +8,21 @@ import AccountCircle from "@material-ui/icons/AccountCircle";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import { AppLogo } from "../../assets";
+import { Button } from "@material-ui/core";
+import { Link } from "react-router-dom";
+import { HOME, LOGIN, REGISTER } from "../../consts/routes";
+import styles from "./Topbar.module.css";
+import TokenService from "../../services/TokenService";
 
 const useStyles = makeStyles((theme) => ({
-  mainToolbarTransparent: {
-    background: "none",
-    transition: "all 0.3s ease-in-out",
-  },
-  mainToolbarWhite: {
-    background: "white",
-    transition: "all 0.3s ease-in-out",
-  },
-
-  toolbar: {
-    margin: "0 300px",
-  },
-  root: {
-    flexGrow: 1,
-  },
   menuButton: {
     marginRight: theme.spacing(2),
-  },
-  titleWhite: {
-    color: "white",
-    textShadow: "black 2px 2px 5px",
-    flexGrow: 1,
-    fontSize: "24px",
-    transition: "all 0.3s ease-in-out",
-  },
-  titleBlack: {
-    color: "black",
-    flexGrow: 1,
-    fontWeight: "bold",
-    letterSpacing: "2px",
-    fontSize: "24px",
-    transition: "all 0.3s ease-in-out",
-  },
-  logo: {
-    width: "64px",
-    height: "64px",
   },
 }));
 
 const TopBar = () => {
   const classes = useStyles();
-  const [auth, setAuth] = React.useState(true);
+  const [auth, setAuth] = React.useState(TokenService.getUser());
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [fixed, setFixed] = React.useState(false);
   const open = Boolean(anchorEl);
@@ -68,10 +39,6 @@ const TopBar = () => {
     }
   };
 
-  const handleChange = (event) => {
-    setAuth(event.target.checked);
-  };
-
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -80,14 +47,19 @@ const TopBar = () => {
     setAnchorEl(null);
   };
 
+  const handleLogout = () => {
+    TokenService.removeUser();
+    setAuth(null);
+  };
+
   return (
     <AppBar
       position={"fixed"}
       className={
-        fixed ? classes.mainToolbarWhite : classes.mainToolbarTransparent
+        fixed ? styles.mainToolbarWhite : styles.mainToolbarTransparent
       }
     >
-      <Toolbar className={classes.toolbar}>
+      <Toolbar className={styles.toolbar}>
         <IconButton
           edge="start"
           className={classes.menuButton}
@@ -97,17 +69,16 @@ const TopBar = () => {
           <img
             src={AppLogo}
             alt={"Back to home page"}
-            className={classes.logo}
-          />{" "}
+            className={styles.logo}
+          />
         </IconButton>
         <Typography
           variant="h6"
-          className={fixed ? classes.titleBlack : classes.titleWhite}
+          className={fixed ? styles.titleBlack : styles.titleWhite}
         >
-          Plan Your Trip
+          <Link to={HOME}>Plan Your Trip </Link>
         </Typography>
-
-        {auth && (
+        {auth ? (
           <div>
             <IconButton
               aria-label="account of current user"
@@ -133,9 +104,19 @@ const TopBar = () => {
               open={open}
               onClose={handleClose}
             >
-              <MenuItem onClick={handleClose}>Profile</MenuItem>
               <MenuItem onClick={handleClose}>My account</MenuItem>
+              <MenuItem onClick={handleLogout}>Logout</MenuItem>
             </Menu>
+          </div>
+        ) : (
+          <div>
+            <Button color="inherit">
+              <Link to={LOGIN}>Login</Link>
+            </Button>
+
+            <Button color="inherit">
+              <Link to={REGISTER}>Register </Link>
+            </Button>
           </div>
         )}
       </Toolbar>
