@@ -12,6 +12,7 @@ import { Button } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import { HOME, LOGIN, REGISTER } from "../../consts/routes";
 import styles from "./Topbar.module.css";
+import TokenService from "../../services/TokenService";
 
 const useStyles = makeStyles((theme) => ({
   menuButton: {
@@ -21,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
 
 const TopBar = () => {
   const classes = useStyles();
-  const [auth, setAuth] = React.useState(false);
+  const [auth, setAuth] = React.useState(TokenService.getUser());
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [fixed, setFixed] = React.useState(false);
   const open = Boolean(anchorEl);
@@ -38,16 +39,17 @@ const TopBar = () => {
     }
   };
 
-  const handleChange = (event) => {
-    setAuth(event.target.checked);
-  };
-
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleLogout = () => {
+    TokenService.removeUser();
+    setAuth(null);
   };
 
   return (
@@ -102,8 +104,8 @@ const TopBar = () => {
               open={open}
               onClose={handleClose}
             >
-              <MenuItem onClick={handleClose}>Profile</MenuItem>
               <MenuItem onClick={handleClose}>My account</MenuItem>
+              <MenuItem onClick={handleLogout}>Logout</MenuItem>
             </Menu>
           </div>
         ) : (
