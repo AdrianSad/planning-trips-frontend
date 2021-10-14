@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { MapContainer } from "../../components";
 import { CssBaseline, Grid } from "@material-ui/core";
 import styles from "./NewTripPage.module.css";
+import { withScriptjs } from "react-google-maps";
 
 class NewTripPage extends Component {
   state = {
@@ -26,11 +27,15 @@ class NewTripPage extends Component {
 
   render() {
     const { markers } = this.state;
+    const MapLoader = withScriptjs(MapContainer);
 
     return (
       <Grid container>
         <Grid item md={8}>
-          <MapContainer mapClicked={this.mapClicked} markers={markers} />
+          <MapLoader
+            googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyCRDJDdcCXe56R7a0gwtqGKN1KmgPrusbI"
+            loadingElement={<div style={{ height: `100%` }} />}
+          />
         </Grid>
         <Grid item md={4} className={styles.rightContainer}>
           <Grid

@@ -1,90 +1,70 @@
-import { GoogleApiWrapper, Map, Marker } from "google-maps-react";
+/*global google*/
+
+// import { GoogleApiWrapper, Map, Marker } from "google-maps-react";
 import { Component } from "react";
 import { isEmpty } from "lodash";
 import { CircularProgress, Grid } from "@material-ui/core";
+import {
+  withGoogleMap,
+  withScriptjs,
+  GoogleMap,
+  DirectionsRenderer,
+} from "react-google-maps";
 
 class MapContainer extends Component {
   state = {
-    places: [],
+    directions: null,
   };
 
-  searchNearby = (map, center) => {
-    const { google } = this.props;
+  componentDidMount() {
+    const directionsService = new google.maps.DirectionsService();
 
-    const service = new google.maps.places.PlacesService(map);
+    const origin = { lat: 6.5244, lng: 3.3792 };
+    const destination = { lat: 6.4667, lng: 3.45 };
 
-    // Specify location, radius and place types for your Places API search.
-    const request = {
-      location: center,
-      radius: "500",
-      type: ["food"],
-    };
-
-    service.nearbySearch(request, (results, status) => {
-      if (status === google.maps.places.PlacesServiceStatus.OK)
-        this.setState({ places: results });
-    });
-  };
-
-  render() {
-    const containerStyle = {
-      position: "relative",
-      width: "100%",
-      height: "100vh",
-    };
-
-    const mapStyle = [
+    directionsService.route(
       {
-        featureType: "landscape.man_made",
-        elementType: "geometry.fill",
-        stylers: [
+        origin: origin,
+        destination: destination,
+        travelMode: google.maps.TravelMode.DRIVING,
+        waypoints: [
           {
-            color: "#dceafa",
+            location: new google.maps.LatLng(6.4698, 3.5852),
+          },
+          {
+            location: new google.maps.LatLng(6.6018, 3.3515),
           },
         ],
       },
-    ];
+      (result, status) => {
+        if (status === google.maps.DirectionsStatus.OK) {
+          console.log(result);
+          this.setState({
+            directions: result,
+          });
+        } else {
+          console.error(`error fetching directions ${result}`);
+        }
+      }
+    );
+  }
 
-    const mapLoaded = (mapProps, map) => {
-      map.setOptions({
-        styles: mapStyle,
-      });
-      this.searchNearby(map, map.center);
-    };
+  render() {
+    const GoogleMapExample = withGoogleMap((props) => (
+      <GoogleMap defaultCenter={{ lat: 6.5244, lng: 3.3792 }} defaultZoom={13}>
+        <DirectionsRenderer directions={this.state.directions} />
+      </GoogleMap>
+    ));
 
     return (
-      <Map
-        google={this.props.google}
-        zoom={7}
-        containerStyle={containerStyle}
-        initialCenter={{
-          lat: 52.065162,
-          lng: 19.252522,
-        }}
-        onReady={(mapProps, map) => mapLoaded(mapProps, map)}
-        // onClick={this.props.mapClicked}
-      >
-        {!isEmpty(this.props.markers) &&
-          this.props.markers.map((marker) => (
-            <Marker
-              title={`${marker.title} title`}
-              name={"TEST"}
-              position={marker.position}
-            />
-          ))}
-      </Map>
+      <div>
+        <GoogleMapExample
+          containerElement={<div style={{ height: `500px`, width: "500px" }} />}
+          mapElement={<div style={{ height: `100%` }} />}
+        />
+      </div>
     );
   }
 }
 
-const Loading = () => (
-  <Grid container justifyContent={"center"} alignItems={"center"}>
-    <CircularProgress />
-  </Grid>
-);
-
-export default GoogleApiWrapper({
-  apiKey: "",
-  libraries: ["places"],
-  LoadingContainer: Loading,
-})(MapContainer);
+export default MapContainer;
