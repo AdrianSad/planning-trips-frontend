@@ -3,10 +3,10 @@ import { TopBar } from "../index";
 import Typography from "@material-ui/core/Typography";
 import styles from "./Layout.module.css";
 
-const Layout = ({ children }) => {
+const Layout = ({ stickyTopBar, children }) => {
   return (
     <main>
-      <TopBar />
+      <TopBar stickyTopBar={stickyTopBar} />
       {children}
       <div className={styles.footer}>
         <Typography variant="title">
