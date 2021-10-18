@@ -1,7 +1,7 @@
 /*global google*/
 
 import React, { Component } from "react";
-import { DraggableList } from "../../components";
+import { DraggableList, Spinner } from "../../components";
 import {
   Button,
   CssBaseline,
@@ -75,6 +75,7 @@ class NewTripPage extends Component {
 
   calculateDirections = () => {
     const { markers, travelMode } = this.state;
+    this.setState({ loading: true });
 
     if (markers.length < 2) {
       return;
@@ -89,8 +90,6 @@ class NewTripPage extends Component {
       location: new google.maps.LatLng(item.position.lat, item.position.lng),
     }));
 
-    console.log(waypoints);
-
     directionsService.route(
       {
         origin: origin,
@@ -100,13 +99,13 @@ class NewTripPage extends Component {
       },
       (result, status) => {
         if (status === google.maps.DirectionsStatus.OK) {
-          console.log(JSON.stringify(result));
           this.setState({
             directions: result,
           });
         } else {
           console.error(`error fetching directions ${result}`);
         }
+        this.setState({ loading: false });
       }
     );
   };
@@ -129,7 +128,7 @@ class NewTripPage extends Component {
   handleChange = (e) => this.setState({ [e.target.name]: e.target.value });
 
   createTrip = () => {
-    this.setState({ loading: false });
+    this.setState({ loading: true });
 
     const { directions, travelMode, markers } = this.state;
 
@@ -174,10 +173,12 @@ class NewTripPage extends Component {
   handleClose = () => this.setState({ alert: { open: false } });
 
   render() {
-    const { markers, markerMode, directions, travelMode, alert } = this.state;
+    const { markers, markerMode, directions, travelMode, alert, loading } =
+      this.state;
 
     return (
       <Grid container>
+        <Spinner visible={loading} />
         <Snackbar
           open={alert?.open}
           autoHideDuration={6000}

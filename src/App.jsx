@@ -7,6 +7,7 @@ import LoginPage from "./pages/LoginPage/LoginPage";
 import configureStore from "./store/configureStore";
 import { Provider } from "react-redux";
 import NewTripPage from "./pages/NewTripPage/NewTripPage";
+import withAuthentication from "./hoc/withAuth";
 
 const store = configureStore();
 
@@ -19,7 +20,7 @@ const App = () => (
         <Route
           path={NEW_TRIP}
           exact
-          component={withLayout(NewTripPage, true)}
+          component={withAuthentication(withLayout(NewTripPage, true))}
         />
         <Route path={HOME} component={withLayout(HomePage)} />
       </Switch>

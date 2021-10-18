@@ -12,7 +12,6 @@ const HttpClient = axios.create({
 HttpClient.interceptors.request.use(
   (config) => {
     const token = TokenService.getLocalAccessToken();
-    console.log(config);
 
     if (token && config.url !== LOGIN && config.url !== REGISTER) {
       config.headers["Authorization"] = "Bearer " + token; // for Spring Boot back-end

@@ -16,7 +16,7 @@ import { LOGIN } from "../../consts/routes";
 import { Link as NavigationLink, withRouter } from "react-router-dom";
 import HttpService from "../../services/HttpService";
 import styles from "./RegisterPage.module.css";
-import { GradientButton } from "../../components";
+import { GradientButton, Spinner } from "../../components";
 import { validateRegisterForm } from "../../utils/validationUtils";
 import { isEmpty } from "lodash";
 
@@ -27,6 +27,7 @@ class RegisterPage extends React.Component {
       text: "",
     },
     errors: null,
+    loading: false,
   };
 
   handleSubmit = (event) => {
@@ -41,10 +42,7 @@ class RegisterPage extends React.Component {
       data.get("acceptRules")
     );
 
-    console.log(data.get("acceptRules"));
-    console.log(newErrors);
-    console.log(Object.values(newErrors));
-    console.log(Object.values(newErrors).every(Boolean));
+    this.setState({ loading: true });
 
     if (Object.values(newErrors).every((it) => it === false)) {
       HttpService.register(
@@ -71,6 +69,7 @@ class RegisterPage extends React.Component {
               open: true,
               text: "Account with this email already exists",
             },
+            loading: false,
           });
         });
     } else {
@@ -80,6 +79,7 @@ class RegisterPage extends React.Component {
           open: true,
           text: "Form has errors",
         },
+        loading: false,
       });
     }
   };
@@ -87,9 +87,10 @@ class RegisterPage extends React.Component {
   handleClose = () => this.setState({ alert: { open: false } });
 
   render() {
-    const { alert, errors } = this.state;
+    const { alert, errors, loading } = this.state;
     return (
       <main className={styles.container}>
+        <Spinner visible={loading} />
         <Snackbar
           open={alert?.open}
           autoHideDuration={6000}
