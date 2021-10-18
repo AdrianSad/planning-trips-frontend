@@ -16,7 +16,11 @@ const App = () => (
       <Switch>
         <Route path={REGISTER} exact component={withLayout(RegisterPage)} />
         <Route path={LOGIN} exact component={withLayout(LoginPage)} />
-        <Route path={NEW_TRIP} exact component={withLayout(NewTripPage)} />
+        <Route
+          path={NEW_TRIP}
+          exact
+          component={withLayout(NewTripPage, true)}
+        />
         <Route path={HOME} component={withLayout(HomePage)} />
       </Switch>
     </BrowserRouter>

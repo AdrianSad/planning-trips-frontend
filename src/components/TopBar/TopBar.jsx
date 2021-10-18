@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const TopBar = () => {
+const TopBar = ({ stickyTopBar }) => {
   const classes = useStyles();
   const [auth, setAuth] = React.useState(TokenService.getUser());
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -54,9 +54,11 @@ const TopBar = () => {
 
   return (
     <AppBar
-      position={"fixed"}
+      position={stickyTopBar ? "sticky" : "fixed"}
       className={
-        fixed ? styles.mainToolbarWhite : styles.mainToolbarTransparent
+        fixed || stickyTopBar
+          ? styles.mainToolbarWhite
+          : styles.mainToolbarTransparent
       }
     >
       <Toolbar className={styles.toolbar}>

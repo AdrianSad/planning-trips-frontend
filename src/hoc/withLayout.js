@@ -1,9 +1,9 @@
 import React from "react";
 import { Layout } from "../components";
 
-export default (Component) => (props) =>
+export default (Component, stickyTopBar) => (props) =>
   (
-    <Layout>
+    <Layout stickyTopBar={stickyTopBar}>
       <Component {...props} />
     </Layout>
   );
