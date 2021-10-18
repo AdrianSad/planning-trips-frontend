@@ -35,7 +35,6 @@ class AttractionsMap extends Component {
       } else {
         HttpService.getTripDetailsFromOpenTripAPI(item.properties.xid)
           .then(({ data }) => {
-            console.log(data);
             this.setState({ selectedAttraction: data, loading: false });
           })
           .catch(console.error);

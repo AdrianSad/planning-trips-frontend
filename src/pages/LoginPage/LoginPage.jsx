@@ -16,7 +16,7 @@ import { connect } from "react-redux";
 import { HOME, REGISTER } from "../../consts/routes";
 import { actions } from "../../store/reducer/authReducer";
 import styles from "./LoginPage.module.css";
-import { GradientButton } from "../../components";
+import { GradientButton, Spinner } from "../../components";
 
 class LoginPage extends React.Component {
   state = {
@@ -24,6 +24,7 @@ class LoginPage extends React.Component {
       open: false,
       text: "",
     },
+    loading: false,
   };
 
   componentDidMount() {
@@ -39,10 +40,11 @@ class LoginPage extends React.Component {
   handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+    this.setState({ loading: true });
 
     HttpService.login(data.get("email"), data.get("password"))
-      .then(({ data }) => {
-        this.props.setUserData(data);
+      .then((response) => {
+        this.props.setUserData(response);
         this.props.history.push({
           pathname: HOME,
           state: {
@@ -60,14 +62,16 @@ class LoginPage extends React.Component {
             open: true,
             text: "Something went wrong",
           },
+          loading: false,
         });
       });
   };
 
   render() {
-    const { alert } = this.state;
+    const { alert, loading } = this.state;
     return (
       <main>
+        <Spinner visible={loading} />
         <Snackbar
           open={alert?.open}
           autoHideDuration={6000}
