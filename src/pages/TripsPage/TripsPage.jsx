@@ -22,6 +22,39 @@ class TripsPage extends Component {
         this.setState({ loading: false });
       });
 
+  deleteTrip = (tripId) => {
+    this.setState({ loading: true });
+
+    HttpService.deleteTrip(tripId)
+      .then(() => this.fetchTrips())
+      .catch((err) => {
+        console.error(err);
+        this.setState({ loading: false });
+      });
+  };
+
+  markTripAsDone = (tripId) => {
+    this.setState({ loading: true });
+
+    HttpService.markTripAsDone(tripId)
+      .then(() => this.fetchTrips())
+      .catch((err) => {
+        console.error(err);
+        this.setState({ loading: false });
+      });
+  };
+
+  markTripAsUndone = (tripId) => {
+    this.setState({ loading: true });
+
+    HttpService.markTripAsUndone(tripId)
+      .then(() => this.fetchTrips())
+      .catch((err) => {
+        console.error(err);
+        this.setState({ loading: false });
+      });
+  };
+
   render() {
     const { trips, loading } = this.state;
 
@@ -43,9 +76,9 @@ class TripsPage extends Component {
             <Grid item xs={10} md={4} lg={3} key={trip.id}>
               <TripItem
                 trip={trip}
-                onDone={"test"}
-                onUndone={"test"}
-                onDelete={"test"}
+                onDone={this.markTripAsDone}
+                onUndone={this.markTripAsUndone}
+                onDelete={this.deleteTrip}
               />
             </Grid>
           ))}
