@@ -1,5 +1,14 @@
 import HttpClient from "./HttpClient";
 import TokenService from "./TokenService";
+import HttpClientOpenTrip from "./HttpClientOpenTrip";
+import {
+  TRIP,
+  TRIP_DELETE,
+  TRIP_DETAILS_OPEN_API,
+  TRIP_DONE,
+  TRIP_UNDONE,
+  TRIPS_OPEN_API,
+} from "../consts/endpoints";
 
 class HttpService {
   register = (username, email, password) => {
@@ -22,13 +31,25 @@ class HttpService {
     });
   };
 
-  logout() {
-    TokenService.removeUser();
-  }
+  logout = () => TokenService.removeUser();
 
-  getCurrentUser() {
-    return TokenService.getUser();
-  }
+  getCurrentUser = () => TokenService.getUser();
+
+  createTrip = (trip) => HttpClient.post(TRIP, trip);
+
+  getTrips = () => HttpClient.get(TRIP);
+
+  deleteTrip = (tripId) => HttpClient.delete(TRIP_DELETE(tripId));
+
+  markTripAsDone = (tripId) => HttpClient.patch(TRIP_DONE(tripId));
+
+  markTripAsUndone = (tripId) => HttpClient.patch(TRIP_UNDONE(tripId));
+
+  getTripsFromOpenTripAPI = (lonMin, lonMax, latMin, latMax) =>
+    HttpClientOpenTrip.get(TRIPS_OPEN_API(lonMin, lonMax, latMin, latMax));
+
+  getTripDetailsFromOpenTripAPI = (placeId) =>
+    HttpClientOpenTrip.get(TRIP_DETAILS_OPEN_API(placeId));
 }
 
 export default new HttpService();

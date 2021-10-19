@@ -10,9 +10,10 @@ import Menu from "@material-ui/core/Menu";
 import { AppLogo } from "../../assets";
 import { Button } from "@material-ui/core";
 import { Link } from "react-router-dom";
-import { HOME, LOGIN, REGISTER } from "../../consts/routes";
+import { HOME, LOGIN, REGISTER, USER_TRIPS } from "../../consts/routes";
 import styles from "./Topbar.module.css";
 import TokenService from "../../services/TokenService";
+import { AccountCircleRounded } from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => ({
   menuButton: {
@@ -20,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const TopBar = () => {
+const TopBar = ({ stickyTopBar }) => {
   const classes = useStyles();
   const [auth, setAuth] = React.useState(TokenService.getUser());
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -54,9 +55,11 @@ const TopBar = () => {
 
   return (
     <AppBar
-      position={"fixed"}
+      position={stickyTopBar ? "sticky" : "fixed"}
       className={
-        fixed ? styles.mainToolbarWhite : styles.mainToolbarTransparent
+        fixed || stickyTopBar
+          ? styles.mainToolbarWhite
+          : styles.mainToolbarTransparent
       }
     >
       <Toolbar className={styles.toolbar}>
@@ -80,6 +83,9 @@ const TopBar = () => {
         </Typography>
         {auth ? (
           <div>
+            <Button color="inherit">
+              <Link to={USER_TRIPS}>My Trips</Link>
+            </Button>
             <IconButton
               aria-label="account of current user"
               aria-controls="menu-appbar"
@@ -87,7 +93,13 @@ const TopBar = () => {
               onClick={handleMenu}
               color="inherit"
             >
-              <AccountCircle />
+              <AccountCircleRounded
+                className={
+                  fixed || stickyTopBar
+                    ? styles.avatarBlack
+                    : styles.avatarWhite
+                }
+              />
             </IconButton>
             <Menu
               id="menu-appbar"
