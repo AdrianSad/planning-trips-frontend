@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import { Typography } from "@material-ui/core";
-import { Check, Delete, RemoveCircle } from "@material-ui/icons";
+import { Check, Clear, Delete } from "@material-ui/icons";
 
 const TripItem = ({ trip, onDone, onUndone, onDelete }) => {
   return (
@@ -52,6 +52,7 @@ const TripItem = ({ trip, onDone, onUndone, onDelete }) => {
           >
             {onDone && (
               <IconButton
+                sx={{ color: trip.done ? "#7CFC00" : "gray" }}
                 aria-label="add to favorites"
                 onClick={(e) => {
                   e.stopPropagation();
@@ -75,13 +76,14 @@ const TripItem = ({ trip, onDone, onUndone, onDelete }) => {
           >
             {onUndone && (
               <IconButton
+                sx={{ color: trip.done ? "gray" : "red" }}
                 aria-label="share"
                 onClick={(e) => {
                   e.stopPropagation();
                   onUndone(trip.id);
                 }}
               >
-                <RemoveCircle />
+                <Clear />
                 Undone
               </IconButton>
             )}
