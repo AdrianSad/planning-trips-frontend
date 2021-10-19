@@ -1,5 +1,5 @@
 import { BrowserRouter, Switch, Route } from "react-router-dom";
-import { HOME, LOGIN, NEW_TRIP, REGISTER } from "./consts/routes";
+import { HOME, LOGIN, NEW_TRIP, REGISTER, USER_TRIPS } from "./consts/routes";
 import HomePage from "./pages/HomePage/HomePage";
 import withLayout from "./hoc/withLayout";
 import RegisterPage from "./pages/RegisterPage/RegisterPage";
@@ -8,6 +8,7 @@ import configureStore from "./store/configureStore";
 import { Provider } from "react-redux";
 import NewTripPage from "./pages/NewTripPage/NewTripPage";
 import withAuthentication from "./hoc/withAuth";
+import TripsPage from "./pages/TripsPage/TripsPage";
 
 const store = configureStore();
 
@@ -21,6 +22,11 @@ const App = () => (
           path={NEW_TRIP}
           exact
           component={withAuthentication(withLayout(NewTripPage, true))}
+        />
+        <Route
+          path={USER_TRIPS}
+          exact
+          component={withAuthentication(withLayout(TripsPage, true))}
         />
         <Route path={HOME} component={withLayout(HomePage)} />
       </Switch>

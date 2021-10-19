@@ -34,6 +34,8 @@ class HttpService {
 
   createTrip = (trip) => HttpClient.post(TRIP, trip);
 
+  getTrips = () => HttpClient.get(TRIP);
+
   getTripsFromOpenTripAPI = (lonMin, lonMax, latMin, latMax) =>
     HttpClientOpenTrip.get(TRIPS_OPEN_API(lonMin, lonMax, latMin, latMax));
 

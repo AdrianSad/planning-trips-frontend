@@ -6,7 +6,6 @@ import { isEmpty } from "lodash";
 import styles from "./AttractionsMap.module.css";
 import { CircularProgress } from "@material-ui/core";
 import HttpService from "../../../services/HttpService";
-import { MAP_SETTINGS } from "../../../consts/mapSettings";
 import { Grid, Link, Typography } from "@mui/material";
 import { WebAsset } from "@material-ui/icons";
 import MapContainer from "../MapContainer/MapContainer";
@@ -43,9 +42,10 @@ class AttractionsMap extends Component {
     this.setState({ selectedAttraction: item, loading: false });
   };
 
-  mapRef = createRef(); //class scope
+  mapRef = createRef();
 
   handleBoundsChanged = () => {
+    this.props.setMapBounds(this.mapRef.current.getBounds());
     const northEast = this.mapRef.current.getBounds().getNorthEast();
     const southWest = this.mapRef.current.getBounds().getSouthWest();
 

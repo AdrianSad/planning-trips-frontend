@@ -17,10 +17,11 @@ import {
 import { reorder } from "../../utils/arrayUtils";
 import { last } from "lodash/array";
 import { TRAVEL_MODES } from "../../consts/travelMode";
-import { AccessTime, DirectionsWalk, Info, Map } from "@material-ui/icons";
+import { AccessTime, DirectionsWalk, Info } from "@material-ui/icons";
 import AttractionsMap from "../../components/Map/AttractionsMap/AttractionsMap";
 import HttpService from "../../services/HttpService";
 import { Snackbar } from "@material-ui/core";
+import { parsePathToStaticMap } from "../../utils/mapParseUtils";
 
 class NewTripPage extends Component {
   state = {
@@ -35,6 +36,7 @@ class NewTripPage extends Component {
       open: false,
       text: "",
     },
+    mapBounds: null,
   };
 
   mapClicked = (clickEvent) => {
@@ -146,6 +148,7 @@ class NewTripPage extends Component {
           longitude: marker.position.lng,
         },
       })),
+      image: this.generateImage(),
     })
       .then(() =>
         this.setState({
@@ -172,6 +175,16 @@ class NewTripPage extends Component {
 
   handleClose = () => this.setState({ alert: { open: false } });
 
+  generateImage = () => {
+    const { markers, directions, mapBounds } = this.state;
+    return parsePathToStaticMap(markers, directions, mapBounds, {
+      height: 860,
+      width: 740,
+    });
+  };
+
+  setMapBounds = (bounds) => this.setState({ mapBounds: bounds });
+
   render() {
     const { markers, markerMode, directions, travelMode, alert, loading } =
       this.state;
@@ -186,13 +199,14 @@ class NewTripPage extends Component {
           message={alert?.text}
           style={{ color: "red" }}
         />
-        <Grid item md={8}>
+        <Grid item md={8} id={"google-map-container"}>
           <AttractionsMap
             markers={markers}
             directions={directions}
             markerMode={markerMode}
             onAttractionClick={this.addAttractionMapMarker}
             onMapClick={this.mapClicked}
+            setMapBounds={this.setMapBounds}
           />
         </Grid>
         <Grid item md={4}>
