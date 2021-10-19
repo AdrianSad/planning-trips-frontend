@@ -10,9 +10,10 @@ import Menu from "@material-ui/core/Menu";
 import { AppLogo } from "../../assets";
 import { Button } from "@material-ui/core";
 import { Link } from "react-router-dom";
-import { HOME, LOGIN, REGISTER } from "../../consts/routes";
+import { HOME, LOGIN, REGISTER, USER_TRIPS } from "../../consts/routes";
 import styles from "./Topbar.module.css";
 import TokenService from "../../services/TokenService";
+import { AccountCircleRounded } from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => ({
   menuButton: {
@@ -82,6 +83,9 @@ const TopBar = ({ stickyTopBar }) => {
         </Typography>
         {auth ? (
           <div>
+            <Button color="inherit">
+              <Link to={USER_TRIPS}>My Trips</Link>
+            </Button>
             <IconButton
               aria-label="account of current user"
               aria-controls="menu-appbar"
@@ -89,7 +93,13 @@ const TopBar = ({ stickyTopBar }) => {
               onClick={handleMenu}
               color="inherit"
             >
-              <AccountCircle />
+              <AccountCircleRounded
+                className={
+                  fixed || stickyTopBar
+                    ? styles.avatarBlack
+                    : styles.avatarWhite
+                }
+              />
             </IconButton>
             <Menu
               id="menu-appbar"

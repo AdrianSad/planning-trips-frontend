@@ -37,6 +37,14 @@
   transition: all 0.3s ease-in-out;
 }
 
+.avatarWhite {
+  color: white;
+}
+
+.avatarBlack {
+  color: black;
+}
+
 .logo {
   width: 64px;
   height: 64px;
