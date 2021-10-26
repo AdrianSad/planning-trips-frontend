@@ -1,6 +1,7 @@
 export const LOGIN = "/api/v1/user/login";
 export const REGISTER = "/api/v1/user/register";
 export const REFRESH_TOKEN = "/api/v1/user/refreshtoken";
+export const USER = "/api/v1/user";
 
 export const TRIP = "/api/v1/trip";
 export const TRIP_DELETE = (tripId) => `/api/v1/trip/${tripId}/delete`;

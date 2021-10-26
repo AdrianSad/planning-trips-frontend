@@ -1,10 +1,9 @@
 import React, { Component } from "react";
 import Hero from "../../components/HomePage/Hero/Hero";
 import Cards from "../../components/HomePage/Cards/Cards";
-import Typography from "@material-ui/core/Typography";
 import styles from "./HomePage.module.css";
-import { Button, Container, Snackbar } from "@material-ui/core";
-import { AccountCircle, Close } from "@material-ui/icons";
+import { Button, Container, Snackbar, Typography } from "@mui/material";
+import { AccountCircle } from "@material-ui/icons";
 
 class HomePage extends Component {
   state = {
@@ -47,6 +46,7 @@ class HomePage extends Component {
             Create account today!
           </Typography>
           <Button
+            sx={{ marginBottom: "50px" }}
             variant={"outlined"}
             size={"large"}
             className={styles.button}

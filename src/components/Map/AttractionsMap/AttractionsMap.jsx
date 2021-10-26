@@ -139,6 +139,7 @@ class AttractionsMap extends Component {
         {!isEmpty(attractions) &&
           attractions.map((marker) => (
             <Marker
+              key={marker.id}
               title={marker.properties.name}
               name={marker.properties.name}
               position={{

@@ -25,10 +25,10 @@ const TripItem = ({ trip, onDone, onUndone, onDelete }) => {
             Your trip informations
           </Typography>
           <Typography variant="h6" color="textSecondary" noWrap>
-            Estimated time: {trip.estimatedTime}
+            Estimated time: {trip.estimatedTime.toFixed(2)}h
           </Typography>
           <Typography variant="h6" color="textSecondary" noWrap>
-            Estimated length: {trip.estimatedLength}
+            Estimated length: {trip.estimatedLength.toFixed(2)}km
           </Typography>
         </CardContent>
       </CardActionArea>
