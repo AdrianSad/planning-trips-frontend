@@ -3,14 +3,24 @@ import { Grid } from "@mui/material";
 import { Spinner, TripItem } from "../../components";
 import { isEmpty } from "lodash";
 import HttpService from "../../services/HttpService";
+import { Snackbar } from "@material-ui/core";
 
 class TripsPage extends Component {
   state = {
     trips: [],
     loading: true,
+    alert: {
+      open: false,
+      text: "",
+    },
   };
 
   componentDidMount() {
+    if (this.props.location?.state) {
+      this.setState({
+        alert: this.props.location.state.alert,
+      });
+    }
     this.fetchTrips();
   }
 
@@ -55,8 +65,10 @@ class TripsPage extends Component {
       });
   };
 
+  handleClose = () => this.setState({ alert: { open: false } });
+
   render() {
-    const { trips, loading } = this.state;
+    const { trips, loading, alert } = this.state;
 
     return (
       <Grid
@@ -69,6 +81,13 @@ class TripsPage extends Component {
         alignItems="center"
         sx={{ padding: "0 25px" }}
       >
+        <Snackbar
+          open={alert?.open}
+          autoHideDuration={6000}
+          onClose={this.handleClose}
+          message={alert?.text}
+          style={{ color: "white" }}
+        />
         <Spinner visible={loading} />
         {!loading &&
           !isEmpty(trips) &&

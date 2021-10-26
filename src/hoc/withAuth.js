@@ -18,7 +18,9 @@ const withAuthentication = (Component, props) => (innerProps) => {
     redirectIfNoAuthorization(LOGIN);
   }, [redirectIfNoAuthorization]);
 
-  return userData && <Component {...innerProps} {...props} />;
+  return (
+    userData && <Component {...innerProps} {...props} userData={userData} />
+  );
 };
 
 export default withAuthentication;

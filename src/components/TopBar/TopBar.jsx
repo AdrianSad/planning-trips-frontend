@@ -4,13 +4,19 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
-import AccountCircle from "@material-ui/icons/AccountCircle";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import { AppLogo } from "../../assets";
 import { Button } from "@material-ui/core";
-import { Link } from "react-router-dom";
-import { HOME, LOGIN, REGISTER, USER_TRIPS } from "../../consts/routes";
+import { Link, useHistory } from "react-router-dom";
+import {
+  HOME,
+  LOGIN,
+  NEW_TRIP,
+  PROFILE,
+  REGISTER,
+  USER_TRIPS,
+} from "../../consts/routes";
 import styles from "./Topbar.module.css";
 import TokenService from "../../services/TokenService";
 import { AccountCircleRounded } from "@material-ui/icons";
@@ -23,6 +29,7 @@ const useStyles = makeStyles((theme) => ({
 
 const TopBar = ({ stickyTopBar }) => {
   const classes = useStyles();
+  const history = useHistory();
   const [auth, setAuth] = React.useState(TokenService.getUser());
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [fixed, setFixed] = React.useState(false);
@@ -53,6 +60,15 @@ const TopBar = ({ stickyTopBar }) => {
     setAuth(null);
   };
 
+  const navigateToProfile = () => {
+    handleClose();
+    history.push(PROFILE);
+  };
+
+  const navigateToMainPage = () => {
+    history.push(HOME);
+  };
+
   return (
     <AppBar
       position={stickyTopBar ? "sticky" : "fixed"}
@@ -68,6 +84,7 @@ const TopBar = ({ stickyTopBar }) => {
           className={classes.menuButton}
           color="inherit"
           aria-label="menu"
+          onClick={navigateToMainPage}
         >
           <img
             src={AppLogo}
@@ -83,6 +100,9 @@ const TopBar = ({ stickyTopBar }) => {
         </Typography>
         {auth ? (
           <div>
+            <Button color="inherit">
+              <Link to={NEW_TRIP}>Create trip</Link>
+            </Button>
             <Button color="inherit">
               <Link to={USER_TRIPS}>My Trips</Link>
             </Button>
@@ -116,7 +136,7 @@ const TopBar = ({ stickyTopBar }) => {
               open={open}
               onClose={handleClose}
             >
-              <MenuItem onClick={handleClose}>My account</MenuItem>
+              <MenuItem onClick={navigateToProfile}>My account</MenuItem>
               <MenuItem onClick={handleLogout}>Logout</MenuItem>
             </Menu>
           </div>

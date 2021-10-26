@@ -22,6 +22,7 @@ import AttractionsMap from "../../components/Map/AttractionsMap/AttractionsMap";
 import HttpService from "../../services/HttpService";
 import { Snackbar } from "@material-ui/core";
 import { parsePathToStaticMap } from "../../utils/mapParseUtils";
+import { HOME, USER_TRIPS } from "../../consts/routes";
 
 class NewTripPage extends Component {
   state = {
@@ -135,10 +136,8 @@ class NewTripPage extends Component {
     const { directions, travelMode, markers } = this.state;
 
     HttpService.createTrip({
-      estimatedTime: parseFloat(directions?.routes[0]?.legs[0]?.duration?.text),
-      estimatedLength: parseFloat(
-        directions?.routes[0]?.legs[0]?.distance?.text
-      ),
+      estimatedTime: directions?.routes[0]?.legs[0]?.duration?.value,
+      estimatedLength: directions?.routes[0]?.legs[0]?.distance?.value,
       route: JSON.stringify(directions || ""),
       travelMode: travelMode?.value || TRAVEL_MODES[0].value,
       markers: markers.map((marker) => ({
@@ -151,11 +150,13 @@ class NewTripPage extends Component {
       image: this.generateImage(),
     })
       .then(() =>
-        this.setState({
-          loading: false,
-          alert: {
-            open: false,
-            text: "",
+        this.props.history.push({
+          pathname: USER_TRIPS,
+          state: {
+            alert: {
+              open: true,
+              text: "You created trip successfully",
+            },
           },
         })
       )

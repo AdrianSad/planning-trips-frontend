@@ -8,6 +8,7 @@ import {
   TRIP_DONE,
   TRIP_UNDONE,
   TRIPS_OPEN_API,
+  USER,
 } from "../consts/endpoints";
 
 class HttpService {
@@ -34,6 +35,10 @@ class HttpService {
   logout = () => TokenService.removeUser();
 
   getCurrentUser = () => TokenService.getUser();
+
+  getCurrentUserData = () => HttpClient.get(USER);
+
+  editUserData = (userData) => HttpClient.put(USER, userData);
 
   createTrip = (trip) => HttpClient.post(TRIP, trip);
 
