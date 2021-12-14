@@ -4,6 +4,7 @@ import { Spinner, TripItem } from "../../components";
 import { isEmpty } from "lodash";
 import HttpService from "../../services/HttpService";
 import { Snackbar } from "@material-ui/core";
+import { parseGoogleMapsPageUrl } from "../../utils/mapParseUtils";
 
 class TripsPage extends Component {
   state = {
@@ -67,6 +68,12 @@ class TripsPage extends Component {
 
   handleClose = () => this.setState({ alert: { open: false } });
 
+  navigateToGoogleMaps = (trip) => {
+    const url = parseGoogleMapsPageUrl(trip);
+    const newWindow = window.open(url, "_blank", "noopener,noreferrer");
+    if (newWindow) newWindow.opener = null;
+  };
+
   render() {
     const { trips, loading, alert } = this.state;
 
@@ -98,6 +105,7 @@ class TripsPage extends Component {
                 onDone={this.markTripAsDone}
                 onUndone={this.markTripAsUndone}
                 onDelete={this.deleteTrip}
+                navigateToGoogleMaps={this.navigateToGoogleMaps}
               />
             </Grid>
           ))}

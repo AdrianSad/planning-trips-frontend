@@ -10,9 +10,15 @@ import {
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import { Typography } from "@material-ui/core";
-import { Check, Clear, Delete } from "@material-ui/icons";
+import { Check, Clear, Delete, Map } from "@material-ui/icons";
 
-const TripItem = ({ trip, onDone, onUndone, onDelete }) => {
+const TripItem = ({
+  trip,
+  onDone,
+  onUndone,
+  onDelete,
+  navigateToGoogleMaps,
+}) => {
   return (
     <Card>
       <CardActionArea component={Link} to={`/trip/${trip.id}`}>
@@ -108,6 +114,30 @@ const TripItem = ({ trip, onDone, onUndone, onDelete }) => {
               >
                 <Delete />
                 Delete
+              </IconButton>
+            )}
+          </Grid>
+          <Grid
+            item
+            xs={12}
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "flex-end",
+              gap: "8px",
+            }}
+          >
+            {navigateToGoogleMaps && (
+              <IconButton
+                sx={{ color: "#DD4B3E" }}
+                aria-label="share"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  navigateToGoogleMaps(trip);
+                }}
+              >
+                <Map />
+                Send to Google Maps
               </IconButton>
             )}
           </Grid>
