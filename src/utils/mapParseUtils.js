@@ -1,4 +1,4 @@
-import { isEmpty } from "lodash";
+import { first, isEmpty, last } from "lodash";
 
 export const parsePathToStaticMap = (
   markers,
@@ -32,15 +32,15 @@ const getZoom = (bounds, mapDim) => {
   const WORLD_DIM = { height: 400, width: 400 };
   const ZOOM_MAX = 21;
 
-  function latRad(lat) {
+  const latRad = (lat) => {
     const sin = Math.sin((lat * Math.PI) / 180);
     const radX2 = Math.log((1 + sin) / (1 - sin)) / 2;
     return Math.max(Math.min(radX2, Math.PI), -Math.PI) / 2;
-  }
+  };
 
-  function zoom(mapPx, worldPx, fraction) {
+  const zoom = (mapPx, worldPx, fraction) => {
     return Math.floor(Math.log(mapPx / worldPx / fraction) / Math.LN2);
-  }
+  };
 
   const ne = bounds.getNorthEast();
   const sw = bounds.getSouthWest();
@@ -54,4 +54,32 @@ const getZoom = (bounds, mapDim) => {
   const lngZoom = zoom(mapDim.width, WORLD_DIM.width, lngFraction);
 
   return Math.min(latZoom, lngZoom, ZOOM_MAX);
+};
+
+export const parseGoogleMapsPageUrl = (trip) => {
+  let baseUrl = "https://www.google.com/maps/dir/?api=1&";
+  baseUrl =
+    baseUrl +
+    `origin=${first(trip.markers).position.latitude},${
+      first(trip.markers).position.longitude
+    }`;
+
+  baseUrl =
+    baseUrl +
+    `&destination=${last(trip.markers).position.latitude},${
+      last(trip.markers).position.longitude
+    }`;
+  baseUrl = baseUrl + `&travelmode=${trip.travelMode.toLowerCase()}`;
+
+  if (trip.markers.length > 2) {
+    baseUrl =
+      baseUrl +
+      "&waypoints=" +
+      trip.markers
+        .slice(1, -1)
+        .map((item) => `${item.position.latitude},${item.position.longitude}&`);
+    baseUrl = baseUrl.slice(0, -1);
+  }
+
+  return baseUrl;
 };

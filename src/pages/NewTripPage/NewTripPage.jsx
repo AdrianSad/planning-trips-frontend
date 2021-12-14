@@ -135,7 +135,7 @@ class NewTripPage extends Component {
 
     const { directions, travelMode, markers } = this.state;
 
-    HttpService.createTrip({
+    const trip = {
       estimatedTime: directions?.routes[0]?.legs[0]?.duration?.value,
       estimatedLength: directions?.routes[0]?.legs[0]?.distance?.value,
       route: JSON.stringify(directions || ""),
@@ -148,7 +148,11 @@ class NewTripPage extends Component {
         },
       })),
       image: this.generateImage(),
-    })
+    };
+
+    console.log(trip);
+
+    HttpService.createTrip(trip)
       .then(() =>
         this.props.history.push({
           pathname: USER_TRIPS,

@@ -25,6 +25,7 @@ class AttractionsMap extends Component {
       .catch(console.error);
 
   setSelectedAttraction = (item) => {
+    console.log(item);
     const { markerMode, onAttractionClick } = this.props;
     this.setState({ loading: true });
 
@@ -130,8 +131,11 @@ class AttractionsMap extends Component {
         {!isEmpty(markers) &&
           markers.map((marker) => (
             <Marker
-              title={`${marker.title} title`}
-              name={"TEST"}
+              icon={{
+                url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
+              }}
+              title={marker.title}
+              name={marker.title}
               position={marker.position}
             />
           ))}
@@ -139,7 +143,6 @@ class AttractionsMap extends Component {
         {!isEmpty(attractions) &&
           attractions.map((marker) => (
             <Marker
-              key={marker.id}
               title={marker.properties.name}
               name={marker.properties.name}
               position={{
